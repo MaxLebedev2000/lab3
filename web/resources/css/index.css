@@ -1,0 +1,30 @@
+#header {
+  text-align: center;
+  font-size: 40pt;
+  font-family: 'Times New Roman', Times, serif;
+  font-style: italic;
+  color: rgb(247, 170, 4);
+    /*background-color: #3366CC;*/
+  text-align: left;
+}
+
+#clock {
+  margin: 0 auto;
+  border: 3px solid black;
+  background: linear-gradient(rgb(95, 222, 245), rgb(16, 82, 156));
+  font-size: 30pt;
+  height: 120px;
+  width: 400px;
+  position: fixed;
+  right: 10px;
+  top: 10px;
+
+}
+
+.link {
+  font-size: 20pt;
+  color:dodgerblue;
+  position: fixed;
+  left: 10px;
+}
+

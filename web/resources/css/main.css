@@ -1,0 +1,41 @@
+table#input {
+  width: 50vw;
+  height: 20vh;
+  border-collapse: collapse;
+  border: 1px solid black;
+  padding: 20px;
+  text-align: center;
+  margin: 4px auto;
+}
+table#input .left {
+  width: 40px;
+}
+table#input th, table#input td {
+  border: 1px solid black;
+}
+table#input caption {
+  font-size: 28px;
+}
+
+#history {
+  width: 50vw;
+  height: 320px;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  flex-direction: column;
+  overflow: auto;
+  position: fixed;
+  right: 20px;}
+ [name]{
+   background-color: #7FFF00 ;
+ }
+
+.canv {
+  width: 42%;
+}
+
+#canvas {
+  cursor: Crosshair;
+  margin-left: 35%;
+}

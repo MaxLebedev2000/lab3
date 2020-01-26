@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<f:view>
+    <h:head>
+        <h:outputScript name="js/functions.js"/>
+        <h:outputScript name="js/canvas.js"/>
+
+        <h:outputStylesheet library="css" name="main.css"/>
+        <h:outputStylesheet library="css" name="common.css"/>
+    </h:head>
+
+    <h:body onload="onloadfunc()">
+
+        <h1>Основаная страница</h1>
+        <table>
+            <tr>
+                <td>
+                    <h:form id="form">
+                        <table id="input">
+                            <caption> Выберете координаты точки и радиус</caption>
+
+                            <colgroup>
+                                <col class="left"/>
+                                <col class="right"/>
+                            </colgroup>
+
+                            <tr>
+
+                                <td>X</td>
+                                <td>
+                                    <h:inputHidden id="x" value="#{checker.formPoint.x}"  />
+                                    <p:commandButton value="-4" class="xbl"  name="xb" onclick="selectX(this, -4)" />
+                                    <p:commandButton value="-3" class="xbl"  name="xb" onclick="selectX(this, -3)"/>
+                                    <p:commandButton value="-2" class="xbl"  name="xb" onclick="selectX(this, -2)"/>
+                                    <p:commandButton value="-1" class="xbl"  name="xb" onclick="selectX(this, -1)"/>
+                                    <p:commandButton value="0"  class="xbl"  name="xb" onclick="selectX(this, 0) " id="def"/>
+                                    <p:commandButton value="1"  class="xbl"  name="xb" onclick="selectX(this, 1)"/>
+                                    <p:commandButton value="2"  class="xbl"  name="xb" onclick="selectX(this, 2)"/>
+                                    <p:commandButton value="3"  class="xbl"  name="xb" onclick="selectX(this, 3)"/>
+                                    <p:commandButton value="4"  class="xbl"  name="xb" onclick="selectX(this, 4)"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>Y</td>
+                                <td>
+                                    в диапозоне (-5;3)
+
+                                    <h:inputText id="y" required="true" autocomplete="false"
+                                                 requiredMessage="Это поле обязательно для отправки формы"
+                                                 maxlength="6" value="#{checker.formPoint.y}" validator="validator">
+                                        <p:ajax update="msg" event="keyup"/>
+                                    </h:inputText>
+                                    <h:message for="y" id="msg" style="color: red; font-size: 15px; margin-left: 2%"/>
+                                </td>
+                            </tr>
+
+                            <tr>
+                                <td>R</td>
+                                <td>
+                                    <h:inputHidden id="r" value="#{checker.formPoint.r}"/>
+
+                                    <p:remoteCommand name="remoteFunction" process="r"/>
+                                    <p:commandButton value="1" id="one"  name="rb" class="rbl" onclick="selectR(this,1)"/>
+                                    <p:commandButton value="1.5" id="two" name="rb" class="rbl" onclick="selectR(this,1.5)"/>
+                                    <p:commandButton value="2" id="three" name="rb" class="rbl" onclick="selectR(this,2)"/>
+                                    <p:commandButton value="2.5" id="four" name="rb" class="rbl" onclick="selectR(this,2.5)"/>
+                                    <p:commandButton value="3" id="five" name="rb" class="rbl" onclick="selectR(this,3)"/>
+                                </td>
+                            </tr>
+
+                        </table>
+                        <br></br>
+                        <br></br>
+                        <br></br>
+
+                        <p:commandButton id="submitButton" action="#{checker.addFormCheck}"
+                                         value="Проверить" update="historyTable json"
+                                         oncomplete="redraw()" process="form"/>
+
+                    </h:form>
+                </td>
+                <td class="canv">
+                    <canvas id="canvas" width="320px" height="320px" style="background: white;"></canvas>
+                    <script type="text/javascript">
+
+                        const width = 320;
+                        const height = 320;
+                        const padding = 20;
+
+                        const canvas = document.getElementById("canvas");
+                        const ctx = canvas.getContext('2d');
+                        canvas.addEventListener("click", listener);
+
+                    </script>
+                </td>
+            </tr>
+            <tr>
+                <td class="hist">
+                    <div id="history">
+
+                        <p:dataTable id="historyTable" emptyMessage="Ещё нет значений" var="check" value="#{checker.list}">
+
+                            <p:column headerText="X">
+                                <h:outputText value="#{check.x}"/>
+                            </p:column>
+
+                            <p:column headerText="Y">
+                                <h:outputText value="#{check.y}"/>
+                            </p:column>
+
+                            <p:column headerText="R">
+                                <h:outputText value="#{check.r}"/>
+                            </p:column>
+
+                            <p:column headerText="Попадание">
+                                <h:outputText value="#{check.hit}"/>
+                            </p:column>
+                        </p:dataTable>
+
+                    </div>
+                </td>
+            </tr>
+
+        </table>
+        <br></br>
+        <br></br>
+        <br></br>
+
+
+        <h:form id="canvas">
+
+            <h:inputHidden id="x-value" value="#{checker.canvasPoint.x}"/>
+            <h:inputHidden id="y-value" value="#{checker.canvasPoint.y}"/>
+            <h:inputHidden id="r-value" value="#{checker.r}"/>
+
+            <p:commandButton id="canvasButton" action="#{checker.addCanvasCheck}"
+                             update="historyTable json"
+                             style="display: none" oncomplete="redraw()"/>
+
+        </h:form>
+
+        <h:outputText id="json" value="#{checker.json}" style="display: none"/>
+
+
+        <h:link class="link" value="Обратно, на начальную страницу" outcome="#{navigator.doAction()}"/>
+
+    </h:body>
+</f:view>
+</html>
